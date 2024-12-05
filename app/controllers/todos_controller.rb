@@ -2,6 +2,7 @@ require "openai"
 
 class TodosController < ApplicationController
   skip_forgery_protection
+  include ErrorHandling
 
   def index
     todos = nil
@@ -16,9 +17,10 @@ class TodosController < ApplicationController
   end
 
   def create
-    todo = Todo.create(todo_params)
-    todo.save!
+    todo = Todo.create!(todo_params)
     render :json => todo
+  rescue ActiveRecord::RecordInvalid => e
+    respond_with_error(e.record)
   end
 
   def generate_from_gpt
