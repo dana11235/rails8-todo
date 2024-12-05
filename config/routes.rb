@@ -11,4 +11,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  match "todos/gpt", to: "todos#generate_from_gpt", via: :post
+  resources :todos
+  match "todos", to: "todos#destroy_all", via: :delete
+  root "todos#index"
 end
